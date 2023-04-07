@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function banner {
+	echo
+    echo '########################################################'
+    echo '#'
+    echo '# '$*
+    echo '#'
+    echo '########################################################'
+	echo
+}
+
+banner "Android init begins"
+
+PA_ROOT=$PWD/../..
+cd $PA_ROOT
+
+echo "Updating WEBRTC optimized build"
+cp -r src/lib/external/webrtc/optimized-android-build/* node_modules/react-native-webrtc/android/libs
+
+echo "Converting android app to androidX"
+npx jetify
+
+banner "Android init ends"

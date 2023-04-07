@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function banner {
+	echo
+    echo '########################################################'
+    echo '#'
+    echo '# '$*
+    echo '#'
+    echo '########################################################'
+	echo
+}
+
+banner "IOS init begins"
+
+PA_ROOT=$PWD/../..
+PA_SCRIPTS=$PA_ROOT/scripts/helper
+cd $PA_ROOT
+
+echo "Updating WEBRTC optimized build"
+cp -r src/lib/external/webrtc/optimized-ios-build/* node_modules/react-native-webrtc/ios
+
+echo "Pods clean up"
+rm -rf ios/Pods
+
+#
+# Close all running xcode processes
+#
+kill $(ps aux | grep 'Xcode' | awk '{print $2}')
+
+#
+# Remove the xcode derived data
+#
+. $PA_SCRIPTS/xcode-clean.sh -d 
+
+echo "Installing Pods ..."
+
+cd ios
+pod install
+
+banner "IOS init ends"

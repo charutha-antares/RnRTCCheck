@@ -1,0 +1,39 @@
+#!/bin/bash
+
+#
+# Color codes
+#
+red=$'\e[1;31m'
+grn=$'\e[1;32m'
+yel=$'\e[1;33m'
+end=$'\e[0m'
+
+#
+# Begin installation
+#
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+#
+# Update brew
+#
+echo "Updating homebrew"
+brew update
+
+echo "Following are the tools that are outdated:-"
+OUTDATE_OUTPUT="$(brew outdated)"
+
+if [ -z "$OUTDATE_OUTPUT" ]; then
+	echo "No outdated tools found."
+	exit 1;
+else
+	printf "${yel}Do you want to upgrade the following outdated tools (yes/no)? ${end}"
+	read UPGRADE
+fi
+
+case $UPGRADE in
+	yes)
+		brew upgrade
+		;;
+	no)
+		;;
+esac	

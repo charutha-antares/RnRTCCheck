@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function banner {
+	echo
+    echo '########################################################'
+    echo '#'
+    echo '# '$*
+    echo '#'
+    echo '########################################################'
+	echo
+}
+
+banner "Setup custom WebRTC binaries. These don't work with iOS simulator"
+
+cp -rv src/lib/external/webrtc/optimized-ios-build/* node_modules/react-native-webrtc/ios
+cp -rv src/lib/external/webrtc/optimized-android-build/* node_modules/react-native-webrtc/android/libs
+npx jetify
+
+banner "End script"

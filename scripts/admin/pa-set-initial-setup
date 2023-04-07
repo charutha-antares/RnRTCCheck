@@ -1,0 +1,99 @@
+#!/bin/bash
+
+PA_ROOT=$PWD/../..
+PA_SCRIPTS=$PA_ROOT/scripts
+PA_HELPER_SCRIPTS=$PA_SCRIPTS/helper
+
+function install {
+	echo
+    echo '########################################################'
+    echo '#'
+    echo '# Installing ' $1 ' ...'
+    echo '#'
+    echo '########################################################'
+	echo
+}
+
+function banner {
+	echo
+    echo '########################################################'
+    echo '#'
+    echo '# '$*
+    echo '#'
+    echo '########################################################'
+	echo
+}
+
+#
+# Usage
+#
+function usage {
+	echo
+    echo Usage : $0 'options [ -h host ]';
+    echo '  options can be a sequence of the following:';
+	echo '      --platform  (mandatory) : can be android, ios or all';
+    echo '      --help                  : print this usage';
+    exit 1;
+}
+
+#
+# Just is just for the fucking nvm
+#
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+#
+# Process arguments
+#
+while [ $# -gt 0 ];
+do
+    [ "$1" == '--platform' ] && { PLATFORM=$2; shift; }
+    [ "$1" == '--help' ] && { usage; }
+
+    shift;
+done
+
+#
+# Check mandatories
+#
+[ -z `command -v nvm` ] && { echo nvm not found; exit 1; }
+[ "$PLATFORM" == "" ] && usage;
+[ -d $PA_SCRIPTS ] || { echo "could not find $PA_SCRIPTS"; exit 1; }
+
+#
+# Begin PA Initialization Process
+#
+banner 'PA setup process started'
+
+#
+# Change nvm Version
+#
+nvm use 11.4.0
+
+#
+# Install node_modules
+#
+install "node_modules"
+cd $PA_ROOT
+npm ci
+
+#
+# Android initialization
+#
+if [ $PLATFORM == 'android' ] || [ $PLATFORM == 'all' ]; then
+	echo
+	cd $PA_HELPER_SCRIPTS
+	. init-android
+fi
+
+#
+# IOS initialization
+#
+if [ $PLATFORM == 'ios' ] || [ $PLATFORM == 'all' ]; then 
+	echo
+	cd $PA_HELPER_SCRIPTS
+	. init-ios
+fi
+
+banner 'PA setup process done'
+
