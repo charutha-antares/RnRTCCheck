@@ -36,7 +36,6 @@ import {
 // } from 'react-native-webrtc';
 
 var WebRTC = require('react-native-webrtc');
-import { MediaStreamTrack} from 'react-native-webrtc';
 
 var {
   RTCPeerConnection,
@@ -82,9 +81,9 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [webrtc, setWebrtc] = useState(null);
 
-  // const backgroundStyle = {
-  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  // };
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
 
 
   // const configuration = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
